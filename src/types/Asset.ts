@@ -24,4 +24,3 @@ export interface Asset {
   status: string;
   unitId: number;
 }
-

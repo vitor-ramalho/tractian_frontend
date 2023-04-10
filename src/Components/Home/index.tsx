@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import HighchartsComponent from "../HighChartComponent";
+import StatusLegend from "../StatusLegend";
+import { AssetContext } from "../../context/assetsContext";
 
 const Home = () => {
-	const [data, setData] = useState<any[]>([]);
-
-	useEffect(() => {
-		fetch("https://my-json-server.typicode.com/tractian/fake-api/assets")
-			.then((response) => response.json())
-			.then((data) => setData(data));
-	}, []);
-
-	return <HighchartsComponent data={data} />;
+	return (
+		<>
+			<StatusLegend />
+			<HighchartsComponent />
+		</>
+	);
 };
 
 export default Home;

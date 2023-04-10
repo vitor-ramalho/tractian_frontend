@@ -1,37 +1,22 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Box, List, ListItem, ListIcon, Spinner, OrderedList, Skeleton } from "@chakra-ui/react";
 import { CheckCircleIcon } from "@chakra-ui/icons";
 import axios from "axios";
 
 import React from "react";
 import { Company } from "../../types/Company";
+import { Unit } from "../../types/Unit";
+import { CompanyContext } from "../../context/companiesContext";
+import { UnitContext } from "../../context/unitsContext";
 
 const Companies = () => {
 
-	const [companies, setCompanies] = useState<Company[]>([]);
-	const [units, setUnits] = useState<Unit[]>([]);
-	const [isLoading, setIsLoading] = useState<boolean>(true);
 
-	useEffect(() => {
-		const getCompaniesAndUnits = async () => {
-			try {
-				const [companiesResponse, unitsResponse] = await Promise.all([
-					axios.get<Company[]>("https://my-json-server.typicode.com/tractian/fake-api/companies"),
-					axios.get<Unit[]>("https://my-json-server.typicode.com/tractian/fake-api/units")
-				]);
-				setCompanies(companiesResponse.data);
-				setUnits(unitsResponse.data);
-				setIsLoading(false);
-			} catch (error) {
-				console.error(error);
-			}
-		};
-		getCompaniesAndUnits();
-	}, []);
-
+	const {loading, companies} = useContext(CompanyContext);
+	const {units} = useContext(UnitContext);
 	return (
 		<OrderedList>
-			{isLoading ? (
+			{loading ? (
 				<>
 					{[1, 2, 3].map((skeletonIndex) => (
 						<ListItem key={skeletonIndex}>
