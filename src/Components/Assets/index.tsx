@@ -23,7 +23,7 @@ const Assets = () => {
 				) : assets.length > 0 ? (
 					assets.map((asset) => (
 						<Card key={asset.id} style={{ width: 240, margin: "10px", cursor: "pointer" }} onClick={() => handleAssetClick(asset)}>
-							<Image src={asset.image} alt={asset.name} height={160} objectFit="cover" />
+							<Image src={asset.image} alt={asset.name} height={160} />
 							<div style={{ padding: "16px" }}>
 								<Typography.Title level={4}>{asset.name}</Typography.Title>
 								<div>
