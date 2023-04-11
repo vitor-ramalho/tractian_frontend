@@ -30,11 +30,11 @@ yarn dev
 
 ### Company list
 
-![plot](./assets/readme/companies.png)
+![plot](./public/readme/companies.png)
 
 ### User List
 
-![plot](./assets/readme/users.png)
+![plot](./public/readme/users.png)
 
 ## License
 
