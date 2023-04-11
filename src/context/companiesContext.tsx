@@ -3,7 +3,7 @@ import React, { createContext, useEffect, useState } from "react";
 import { Company } from "../types/Company";
 import api from "../api/api";
 
-interface CompanyContextType {
+export interface CompanyContextType {
   companies: Company[];
   getCompanies: () => void;
   setCompany: (values: any) => void;

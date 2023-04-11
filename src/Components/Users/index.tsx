@@ -1,55 +1,45 @@
-import { useState, useEffect, useContext } from "react";
-import axios from "axios";
-import {
-	Box,
-	Text,
-	Heading,
-	VStack,
-	Grid,
-	GridItem,
-	Spinner,
-	Table,
-	Tr,
-	Th,
-	Td,
-} from "@chakra-ui/react";
+import React, { useContext } from "react";
+import { Table, Spin, Typography } from "antd";
 import { UserContext } from "../../context/usersContext";
 
-type User = {
-	companyId: number;
-	email: string;
-	id: number;
-	name: string;
-	unitId: number;
-};
+interface User {
+  companyId: number;
+  email: string;
+  id: number;
+  name: string;
+  unitId: number;
+}
 
-const Users = () => {
-
+const Users: React.FC = () => {
 	const { users, loading } = useContext(UserContext);
 
+	const columns = [
+		{
+			title: "Name",
+			dataIndex: "name",
+		},
+		{
+			title: "Email",
+			dataIndex: "email",
+		},
+		{
+			title: "Company ID",
+			dataIndex: "companyId",
+		},
+	];
+
 	return (
-		<Box>
+		<>
 			{loading ? (
-				<Spinner size="xl" />
+				<div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+					<Spin size="large" />
+				</div>
 			) : (
-				<VStack spacing={4}>
-					<Table variant="striped">
-						<Tr>
-							<Th>Name</Th>
-							<Th>Email</Th>
-							<Th>Company ID</Th>
-						</Tr>
-						{users.map((user, index) => (
-							<Tr key={user.id} bg={index % 2 === 0 ? "gray.100" : "white"}>
-								<Td>{user.name}</Td>
-								<Td>{user.email}</Td>
-								<Td>{user.companyId}</Td>
-							</Tr>
-						))}
-					</Table>
-				</VStack>
+				<div style={{ padding: 24 }}>
+					<Table columns={columns} dataSource={users} pagination={{ pageSize: 10 }} />
+				</div>
 			)}
-		</Box>
+		</>
 	);
 };
 

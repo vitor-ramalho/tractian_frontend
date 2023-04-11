@@ -1,163 +1,74 @@
-import React, { ReactNode } from "react";
-import {
-	IconButton,
-	Box,
-	CloseButton,
-	Flex,
-	Icon,
-	useColorModeValue,
-	Drawer,
-	DrawerContent,
-	Text,
-	useDisclosure,
-	BoxProps,
-	FlexProps,
-} from "@chakra-ui/react";
-import { Link } from "react-router-dom";
-import {
-	FiHome,
-	FiTrendingUp,
-	FiCompass,
-	FiStar,
-	FiSettings,
-	FiMenu,
-} from "react-icons/fi";
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import React, { ReactNode, useState } from "react";
+import { NavLink } from "react-router-dom";
+import { FiHome, FiTrendingUp, FiCompass, FiStar, FiSettings, FiUser } from "react-icons/fi";
+import { Layout, Menu } from "antd";
 import { IconType } from "react-icons";
 import { ReactText } from "react";
+
+const { Sider, Content } = Layout;
+const { SubMenu } = Menu;
 
 interface LinkItemProps {
   name: string;
   icon: IconType;
   path: string;
 }
+
 const LinkItems: Array<LinkItemProps> = [
-	{ name: "Home", icon: FiHome, path: "/" },
-	{ name: "Asset", icon: FiTrendingUp, path: "/asset" },
+	{ name: "Dashboard", icon: FiTrendingUp, path: "/" },
+	{ name: "Assets", icon: FiSettings, path: "/asset" },
 	{ name: "Company", icon: FiCompass, path: "/company" },
-	{ name: "Unit", icon: FiSettings, path: "/units" },
-	{ name: "Users", icon: FiSettings, path: "/users" },
-	{ name: "Workorders", icon: FiSettings, path: "/workorders" },
+	{ name: "Users", icon: FiUser, path: "/users" }
 ];
 
 export default function Sidebar({ children }: { children: ReactNode }) {
-	const { isOpen, onOpen, onClose } = useDisclosure();
+	const [collapsed, setCollapsed] = useState(false);
+
+	const onCollapse = (collapsed: boolean) => {
+		setCollapsed(collapsed);
+	};
+
 	return (
-		<Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
-			<SidebarContent
-				onClose={() => onClose}
-				display={{ base: "none", md: "block" }}
-			/>
-			<Drawer
-				autoFocus={false}
-				isOpen={isOpen}
-				placement="left"
-				onClose={onClose}
-				returnFocusOnClose={false}
-				onOverlayClick={onClose}
-				size="full">
-				<DrawerContent>
-					<SidebarContent onClose={onClose} />
-				</DrawerContent>
-			</Drawer>
-			{/* mobilenav */}
-			<MobileNav display={{ base: "flex", md: "none" }} onOpen={onOpen} />
-			<Box ml={{ base: 0, md: 60 }} p="4">
-				{children}
-			</Box>
-		</Box>
+		<Layout style={{ minHeight: "100vh" }}>
+			<Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
+				<div style={{ height: "32px", margin: "16px", background: "rgba(255, 255, 255, 0.3)" }} />
+				<Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
+					{LinkItems.map((link, index) => (
+						<Menu.Item key={index} icon={<link.icon />}>
+							<NavLink to={link.path}>{link.name}</NavLink>
+						</Menu.Item>
+					))}
+				</Menu>
+			</Sider>
+			<Layout className="site-layout">
+				<Content style={{ margin: "16px" }}>
+					<div style={{ padding: 24, minHeight: 360 }}>{children}</div>
+				</Content>
+			</Layout>
+		</Layout>
 	);
 }
 
-interface SidebarProps extends BoxProps {
-  onClose: () => void;
-}
-
-const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
-	return (
-		<Box
-			bg={useColorModeValue("white", "gray.900")}
-			borderRight="1px"
-			borderRightColor={useColorModeValue("gray.200", "gray.700")}
-			w={{ base: "full", md: 60 }}
-			pos="fixed"
-			h="full"
-			{...rest}>
-			<Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-				<Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          Logo
-				</Text>
-				<CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
-			</Flex>
-			{LinkItems.map((link) => (
-				<NavItem key={link.name} icon={link.icon} path={link.path}>
-					{link.name}
-				</NavItem>
-			))}
-		</Box>
-	);
-};
-
-interface NavItemProps extends FlexProps {
+interface NavItemProps extends React.HTMLAttributes<HTMLDivElement> {
   icon: IconType;
   children: ReactText;
   path: string;
 }
+
 const NavItem = ({ icon, children, path, ...rest }: NavItemProps) => {
 	return (
-		<Link to={path} style={{ textDecoration: "none" }}>
-			<Flex
-				align="center"
-				p="4"
-				mx="4"
-				borderRadius="lg"
-				role="group"
-				cursor="pointer"
-				_hover={{
-					bg: "cyan.400",
-					color: "white",
-				}}
-				{...rest}>
-				{icon && (
-					<Icon
-						mr="4"
-						fontSize="16"
-						_groupHover={{
-							color: "white",
-						}}
-						as={icon}
-					/>
-				)}
-				{children}
-			</Flex>
-		</Link>
-	);
-};
-
-interface MobileProps extends FlexProps {
-  onOpen: () => void;
-}
-const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
-	return (
-		<Flex
-			ml={{ base: 0, md: 60 }}
-			px={{ base: 4, md: 24 }}
-			height="20"
-			alignItems="center"
-			bg={useColorModeValue("white", "gray.900")}
-			borderBottomWidth="1px"
-			borderBottomColor={useColorModeValue("gray.200", "gray.700")}
-			justifyContent="flex-start"
-			{...rest}>
-			<IconButton
-				variant="outline"
-				onClick={onOpen}
-				aria-label="open menu"
-				icon={<FiMenu />}
-			/>
-
-			<Text fontSize="2xl" ml="8" fontFamily="monospace" fontWeight="bold">
-        Logo
-			</Text>
-		</Flex>
+		<SubMenu
+			key="sub1"
+			//@ts-ignore
+			icon={icon}
+			title={
+				<NavLink to={path}>
+					{children}
+				</NavLink>
+			}
+		>
+			{/* Submenu items goes here */}
+		</SubMenu>
 	);
 };

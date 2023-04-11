@@ -1,46 +1,54 @@
 import { useState, useEffect, useContext } from "react";
-import { Box, List, ListItem, ListIcon, Spinner, OrderedList, Skeleton } from "@chakra-ui/react";
-import { CheckCircleIcon } from "@chakra-ui/icons";
-import axios from "axios";
-
+import { Table, Space, Skeleton } from "antd";
+import { CheckCircleOutlined } from "@ant-design/icons";
 import React from "react";
-import { Company } from "../../types/Company";
 import { Unit } from "../../types/Unit";
 import { CompanyContext } from "../../context/companiesContext";
 import { UnitContext } from "../../context/unitsContext";
 
+const columns = [
+	{
+		title: "Company",
+		dataIndex: "name"
+	},
+	{
+		title: "Units",
+		dataIndex: "units",
+		render: (units: Unit[]) => (
+			<Space direction="vertical">
+				{units.map((unit) => (
+					<span key={unit.id}>
+						{unit.name}
+						<CheckCircleOutlined style={{ color: "#00CC00" }} />
+					</span>
+				))}
+			</Space>
+		)
+	}
+];
+
 const Companies = () => {
+	const { loading, companies } = useContext(CompanyContext);
+	const { units } = useContext(UnitContext);
 
+	const [data, setData] = useState<Record<string, any>[]>([]);
 
-	const {loading, companies} = useContext(CompanyContext);
-	const {units} = useContext(UnitContext);
+	useEffect(() => {
+		if (!loading && companies.length > 0 && units.length > 0) {
+			setData(
+				companies.map((company) => ({
+					key: company.id,
+					name: company.name,
+					units: units.filter((unit) => unit.companyId === company.id)
+				}))
+			);
+		}
+	}, [loading, companies, units]);
+
 	return (
-		<OrderedList>
-			{loading ? (
-				<>
-					{[1, 2, 3].map((skeletonIndex) => (
-						<ListItem key={skeletonIndex}>
-							<Skeleton height="20px" />
-						</ListItem>
-					))}
-				</>
-			) : (
-				<>
-					{companies.map((company) => (
-						<ListItem key={company.id}>
-							{company.name}
-							<OrderedList>
-								{units
-									.filter((unit) => unit.companyId === company.id)
-									.map((unit) => (
-										<ListItem key={unit.id}>{unit.name}</ListItem>
-									))}
-							</OrderedList>
-						</ListItem>
-					))}
-				</>
-			)}
-		</OrderedList>
+		<Skeleton active loading={loading}>
+			<Table columns={columns} dataSource={data} pagination={false} />
+		</Skeleton>
 	);
 };
 

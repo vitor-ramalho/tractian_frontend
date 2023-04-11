@@ -1,22 +1,46 @@
-import { Box, Text, Flex } from "@chakra-ui/react";
+import React from "react";
+import { Card } from "antd";
 
 const StatusLegend: React.FC = () => {
 	return (
-		<Box borderWidth="1px" borderRadius="lg" overflow="hidden" p={4}>
-			<Text fontSize="lg" fontWeight="bold" mb={4}>Asset Status</Text>
-			<Flex alignItems="center" mt={2}>
-				<Box h={4} w={4} borderRadius="full" bg="#00CC00" mr={2}></Box>
-				<Text>In operation</Text>
-			</Flex>
-			<Flex alignItems="center" mt={2}>
-				<Box h={4} w={4} borderRadius="full" bg="#FFC300" mr={2}></Box>
-				<Text>In downtime</Text>
-			</Flex>
-			<Flex alignItems="center" mt={2}>
-				<Box h={4} w={4} borderRadius="full" bg="#FF0000" mr={2}></Box>
-				<Text>In alert</Text>
-			</Flex>
-		</Box>
+		<Card style={{ width: 150 }}>
+			<div style={{ display: "flex", alignItems: "center", marginTop: "8px" }}>
+				<div
+					style={{
+						width: "10px",
+						height: "10px",
+						borderRadius: "50%",
+						backgroundColor: "#00CC00",
+						marginRight: "8px"
+					}}
+				></div>
+				<span>In operation</span>
+			</div>
+			<div style={{ display: "flex", alignItems: "center", marginTop: "8px" }}>
+				<div
+					style={{
+						width: "10px",
+						height: "10px",
+						borderRadius: "50%",
+						backgroundColor: "#FFC300",
+						marginRight: "8px"
+					}}
+				></div>
+				<span>In downtime</span>
+			</div>
+			<div style={{ display: "flex", alignItems: "center", marginTop: "8px" }}>
+				<div
+					style={{
+						width: "10px",
+						height: "10px",
+						borderRadius: "50%",
+						backgroundColor: "#FF0000",
+						marginRight: "8px"
+					}}
+				></div>
+				<span>In alert</span>
+			</div>
+		</Card>
 	);
 };
 

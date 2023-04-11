@@ -3,7 +3,7 @@ import React, { createContext, useEffect, useState } from "react";
 import { Unit } from "../types/Unit";
 import api from "../api/api";
 
-interface UnitContextType {
+export interface UnitContextType {
   units: Unit[];
   getUnits: () => void;
   setUnit: (values: any) => void;
