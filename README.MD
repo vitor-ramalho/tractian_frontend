@@ -26,7 +26,7 @@ yarn dev
 ### Assets List
 
 ![Asset](./public/readme/assets.png)
-![Asset](./public/readme/modal.png)
+![Asset](./public/readme/modal.PNG)
 
 ### Company list
 
